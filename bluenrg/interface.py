@@ -59,6 +59,11 @@ class Interface(object):
     def add_event_listener(self, event, func):
         self._event_listeners.setdefault(event, []).append(func)
 
+    def version(self):
+        res = self._conn.exec_sync(commands.ACI_HAL_GET_FIRMWARE_DETAILS())
+
+        return "{:}.{:}.{:}".format(res.DTM_version_major, res.DTM_version_minor, res.DTM_version_patch)
+
     def mac_address(self):
         res = self._conn.exec_sync(commands.ACI_HAL_READ_CONFIG_DATA(
             Offset=0x80
